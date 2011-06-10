@@ -1,13 +1,19 @@
+import warnings
+
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 from debug_toolbar.panels import DebugPanel
+from django.utils import simplejson
 
 class HeaderDebugPanel(DebugPanel):
     """
     A panel to display HTTP headers.
     """
     name = 'Header'
+    title = _('HTTP Headers')
+    template = 'debug_toolbar/panels/headers.html'
     has_content = True
+
     # List of headers we want to display
     header_filter = (
         'CONTENT_TYPE',
@@ -33,12 +39,15 @@ class HeaderDebugPanel(DebugPanel):
     )
 
     def nav_title(self):
+        warnings.warn('Old style use of nav_title method.', DeprecationWarning)
         return _('HTTP Headers')
 
     def title(self):
+        warnings.warn('Old style use of title method.', DeprecationWarning)
         return _('HTTP Headers')
 
     def url(self):
+        warnings.warn('Old style use of url method.', DeprecationWarning)
         return ''
 
     def process_request(self, request):
@@ -47,8 +56,13 @@ class HeaderDebugPanel(DebugPanel):
         )
 
     def content(self):
+        warnings.warn('Old style use of content method.', DeprecationWarning)
         context = self.context.copy()
         context.update({
             'headers': self.headers
         })
-        return render_to_string('debug_toolbar/panels/headers.html', context)
+        return render_to_string('debug_toolbar/panels/headers.html', context)        
+        
+    def get_data(self):
+        return self.headers
+    

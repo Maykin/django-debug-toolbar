@@ -33,6 +33,9 @@ class DebugPanel(object):
     def url(self):
         raise NotImplementedError
 
+    def get_data(self):
+        raise NotImplementedError
+
     def content(self):
         raise NotImplementedError
 
