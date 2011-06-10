@@ -194,3 +194,10 @@ def template_source(request):
         'source': source,
         'template_name': template_name
     })
+
+
+def console(request):
+    return render_to_response('debug_toolbar/console.html')
+    
+def console_data(request):
+    return render_to_response('debug_toolbar/data.html')
