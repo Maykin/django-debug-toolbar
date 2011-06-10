@@ -1,0 +1,22 @@
+<html>
+    <head>
+        <title>Django Debug Console</title>
+        <script type="text/javascript" src="/media/js/jquery.js"></script>
+        <script type="text/javascript">
+            $(document).ready(function() {
+                window.setInterval(function(){
+                    $.getJSON('/__debug__/console_data/', function(data) {
+                        $("#console table").append("<tr><td>"+data.data+"</td></tr>")
+                    });
+                }, 2000);
+            });
+        </script>
+    </head>
+    <body>
+        <h1>Django Debug Console</h1>
+        <div id="console">
+            <table>
+            </table>
+        </div>
+    </body>
+</html>
