@@ -128,15 +128,26 @@ class DebugToolbarMiddleware(object):
                     {'redirect_to': redirect_to}
                 )
                 response.cookies = cookies
-        if 'gzip' not in response.get('Content-Encoding', '') and \
+        del self.__class__.debug_toolbars[ident]
+        if 'gzip' not in response.get('Content-Encoding', '') and\
            response.get('Content-Type', '').split(';')[0] in _HTML_TYPES:
+            data = {"SESSION_ID": request.session.session_key}
             for panel in toolbar.panels:
                 panel.process_response(request, response)
-            response.content = replace_insensitive(
-                smart_unicode(response.content), 
-                self.tag,
-                smart_unicode(toolbar.render_toolbar() + self.tag))
-            if response.get('Content-Length', None):
-                response['Content-Length'] = len(response.content)
-        del self.__class__.debug_toolbars[ident]
+                data[panel.name] = panel.get_data()
+
+            from debug_toolbar.utils.backend import CacheBackend
+            cb = CacheBackend()
+            cb.store(data)
+
+            for i in range(cb.last()):
+                print i, cb.get(i)
+
+
+        #            response.content = replace_insensitive(
+        #                smart_unicode(response.content),
+        #                self.tag,
+        #                smart_unicode(toolbar.render_toolbar() + self.tag))
+        #            if response.get('Content-Length', None):
+        #                response['Content-Length'] = len(response.content)
         return response
